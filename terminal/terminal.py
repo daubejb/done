@@ -1,3 +1,10 @@
+import os
+import os.path
+import fcntl
+import termios
+import struct
+import argparse
+
 from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
@@ -6,11 +13,15 @@ from colorama import init
 from colorama import Fore
 from colorama import Style
 
-import fcntl
-import termios
-import struct
-import argparse
-
+HISTORY_FILE = os.path.join(os.environ['HOME'], '.done_history.txt')
+ACTIONS = ['action',
+           'followup',
+           'idea',
+           'research',
+           'schedule',
+           'update']
+CONTEXTS = ['work',
+            'home']
 
 def main():
     pass
@@ -89,9 +100,67 @@ class Terminal:
         except ImportError:
             flags = None
 
-    def display_todo_list():
+    def evaluate_user_input(self, args):
+        if args.add:
+            interactive_prompt = InteractivePrompt()
+            inp = interactive_prompt.prompt_user_for_new_item()
+            input_analyzer = InputAnalyzer()
+            values = input_analyzer.break_item_string_into_parts(inp)
+            return values
+        if args.web:
+            print('web')
+        if args.id_to_delete:
+            print('delete')
+        if args.id_done:
+            print('do')
+        if args.id_to_prioritize:
+            print('priority')
+        if args.id:
+            print('move')
+
+
+    def display_todo_list(self):
         '''displays the todo list in the terminal'''
         pass
+
+
+class InteractivePrompt:
+    '''Represents a dynamic fish shell like interaction with the user.'''
+    def __init__(self):
+        '''Initializes an instance of the interactive prompt'''
+
+    def prompt_user_for_new_item(self):
+        group_completer = WordCompleter(ACTIONS, ignore_case=True)
+        inp = prompt('Enter to do item > ',
+                     history=FileHistory(HISTORY_FILE),
+                     auto_suggest=AutoSuggestFromHistory(),
+                     completer=group_completer)
+        return inp
+
+
+class InputAnalyzer:
+    '''Takes user input and parses it into distinct todo item fields'''
+    def __init__(self):
+        '''Initializes an input analyzer'''
+
+    def break_item_string_into_parts(self, inp):
+        '''Takes a string and breaks it up into the relavent to-do list
+        parts'''
+        self.inp = inp
+        word_list = inp.split()
+        first_word = word_list[0]
+        last_word = word_list[-1]
+        word_one = " "
+        word_last = " "
+        if first_word in ACTIONS:
+            word_one = first_word
+            del word_list[0]
+        if last_word in CONTEXTS:
+            word_last = last_word
+            del word_list[-1]
+        item_words = ' '.join(word_list)
+        values = ['=row()-1', '', word_one, item_words, word_last]
+        return values
 
 if __name__ == '__main__':
     main()

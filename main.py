@@ -51,19 +51,7 @@ def instantiate_api_service(credentials):
                               discoveryServiceUrl=discoveryUrl)
     return service
 
-def evaluate_args(args):
-    if args.add:
-        print('add')
-    if args.web:
-        print('web')
-    if args.id_to_delete:
-        print('delete')
-    if args.id_done:
-        print('do')
-    if args.id_to_prioritize:
-        print('priority')
-    if args.id:
-        print('move')
+
 
 
 def main():
@@ -72,9 +60,10 @@ def main():
     terminal = Terminal()
     args = terminal.get_user_input()
     todo_list = TodoList('done')
-    values = todo_list.get_list_data(service)
-    evaluate_args(args)
+    values = terminal.evaluate_user_input(args)
     print(values)
+    all_list_data = todo_list.get_list_data(service)
+    print(all_list_data)
 
 
 if __name__ == '__main__':
