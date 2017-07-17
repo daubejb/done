@@ -85,6 +85,7 @@ class Terminal:
                                 action='store_true',
                                 dest='web')
             args = parser.parse_args()
+            return args
         except ImportError:
             flags = None
 

@@ -13,9 +13,7 @@ import os.path
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CLIENT_SECRET_FILE = 'client_secrets.json'
 APPLICATION_NAME = 'done'
-SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
-RANGE = '2done!A2:E1000'
-DONE_RANGE = 'done!A2:F1000'
+
 
 def get_credentials():
     # Gets valid user credentials from storage.
@@ -53,14 +51,29 @@ def instantiate_api_service(credentials):
                               discoveryServiceUrl=discoveryUrl)
     return service
 
+def evaluate_args(args):
+    if args.add:
+        print('add')
+    if args.web:
+        print('web')
+    if args.id_to_delete:
+        print('delete')
+    if args.id_done:
+        print('do')
+    if args.id_to_prioritize:
+        print('priority')
+    if args.id:
+        print('move')
+
 
 def main():
     credentials = get_credentials()
     service = instantiate_api_service(credentials)
     terminal = Terminal()
-    terminal.get_user_input()
+    args = terminal.get_user_input()
     todo_list = TodoList('done')
     values = todo_list.get_list_data(service)
+    evaluate_args(args)
     print(values)
 
 
