@@ -5,10 +5,17 @@ from oauth2client import client
 from oauth2client import tools
 from oauth2client.file import Storage
 
+
 import httplib2
 import os
 import os.path
 
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+CLIENT_SECRET_FILE = 'client_secrets.json'
+APPLICATION_NAME = 'done'
+SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
+RANGE = '2done!A2:E1000'
+DONE_RANGE = 'done!A2:F1000'
 
 def get_credentials():
     # Gets valid user credentials from storage.
@@ -48,8 +55,14 @@ def instantiate_api_service(credentials):
 
 
 def main():
-    t = Terminal()
-    t.get_user_input()
+    credentials = get_credentials()
+    service = instantiate_api_service(credentials)
+    terminal = Terminal()
+    terminal.get_user_input()
+    todo_list = TodoList('done')
+    values = todo_list.get_list_data(service)
+    print(values)
+
 
 if __name__ == '__main__':
     main()

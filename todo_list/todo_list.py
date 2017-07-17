@@ -1,3 +1,6 @@
+SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
+RANGE_ = '2done!A2:E1000'
+
 class TodoList:
     '''Represents a minimal personal todo list containing to do items that
     can be added, done, deleted, and prioritized'''
@@ -17,6 +20,12 @@ class TodoList:
             if todo_item.id == item_id:
                 return todo_item
         return None
+
+    def get_list_data(self, service):
+        result = service.spreadsheets().values().get(
+            spreadsheetId=SPREADSHEET_ID, range=RANGE_).execute()
+        values = result.get('values', [])
+        return values
 
 # Store the next available id for all new todo items
 last_todo_id = 0
