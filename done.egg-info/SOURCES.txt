@@ -1,0 +1,11 @@
+done.egg-info/PKG-INFO
+done.egg-info/SOURCES.txt
+done.egg-info/dependency_links.txt
+done.egg-info/entry_points.txt
+done.egg-info/not-zip-safe
+done.egg-info/requires.txt
+done.egg-info/top_level.txt
+terminal/__init__.py
+terminal/terminal.py
+todo_list/__init__.py
+todo_list/todo_list.py

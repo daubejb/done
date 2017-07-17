@@ -1,0 +1,11 @@
+Metadata-Version: 1.0
+Name: done
+Version: 1.0
+Summary: tdod app to manage todo list from terminal with                 data residing on a google sheet
+Home-page: http://www.github.com/daubejb/done
+Author: Jeffrey B. Daube
+Author-email: daubejb@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Keywords: todo to do list application done daube design              dabedesign
+Platform: UNKNOWN

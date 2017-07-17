@@ -1,0 +1,4 @@
+terminalTables
+prompt_toolkit
+apiclient
+oauth2client
