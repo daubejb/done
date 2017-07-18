@@ -62,6 +62,8 @@ class GoogleAPI:
             self.delete_item_from_sheet(values)
         if action_type == 'done_item':
             self.done_item_from_sheet(values)
+        if action_type == 'prioritize_item':
+            self.toggle_item_priority(values)
 
     def append_item_to_sheet(self, values):
         body = {
@@ -132,4 +134,45 @@ class GoogleAPI:
             valueInputOption='USER_ENTERED',
             body=body).execute()
         self.delete_item_from_sheet(item_id)
+        return
+
+    def toggle_item_priority(self, item_id):
+        item_id = int(item_id)
+        A1 = item_id + 1
+        print(id)
+        print(A1)
+        range_ = '%s!B%s' % (APPLICATION_NAME, A1)
+        s = self.service
+        request = s.spreadsheets().values().batchGet(
+                spreadsheetId=SPREADSHEET_ID,
+                ranges=range_,
+                valueRenderOption='FORMATTED_VALUE',
+                dateTimeRenderOption='FORMATTED_STRING')
+
+        response = request.execute()
+
+        if 'values' not in response['valueRanges'][0]:
+            priority = "yes"
+        else:
+            priority = response['valueRanges'][0]['values'][0]
+            if priority[0] == 'Yes' or priority[0] == 'yes':
+                priority = " "
+            else:
+                priority = 'yes'
+
+        value_input_option = 'USER_ENTERED'
+
+        body_ = {
+            "values": [
+                [priority]
+                ]
+            }
+
+        request = s.spreadsheets().values().update(
+                spreadsheetId=SPREADSHEET_ID,
+                range=range_,
+                valueInputOption=value_input_option,
+                includeValuesInResponse=True,
+                body=body_)
+        response = request.execute()
         return

@@ -118,7 +118,7 @@ class Terminal:
         if args.id_done:
             return args.id_done, 'done_item'
         if args.id_to_prioritize:
-            print('priority')
+            return args.id_to_prioritize, 'prioritize_item'
         if args.id:
             print('move')
 
