@@ -120,7 +120,7 @@ class Terminal:
         if args.id_to_prioritize:
             return args.id_to_prioritize, 'prioritize_item'
         if args.id:
-            print('move')
+            return args.id, 'move_item'
 
 
     def display_todo_list(self):

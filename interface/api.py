@@ -64,6 +64,9 @@ class GoogleAPI:
             self.done_item_from_sheet(values)
         if action_type == 'prioritize_item':
             self.toggle_item_priority(values)
+        if action_type == 'move_item':
+            self.move_item_to_new_position(values)
+
 
     def append_item_to_sheet(self, values):
         body = {
@@ -176,3 +179,28 @@ class GoogleAPI:
                 body=body_)
         response = request.execute()
         return
+
+    def move_item_to_new_position(self, item_ids):
+        destination_row_index = int(item_ids[1])
+        item_to_move = int(item_ids[0])
+        end_index = item_to_move + 1
+        batch_update_spreadsheet_request_body = {
+                'requests': [
+                    {
+                        "moveDimension": {
+                            "source": {
+                                "sheetId": 0,
+                                "dimension": "ROWS",
+                                "startIndex": item_to_move,
+                                "endIndex": end_index
+                                },
+                            "destinationIndex": destination_row_index
+                            }
+                        },
+                    ]
+                }
+        s = self.service
+        request = s.spreadsheets().batchUpdate(
+                spreadsheetId=SPREADSHEET_ID,
+                body=batch_update_spreadsheet_request_body)
+        response = request.execute()
