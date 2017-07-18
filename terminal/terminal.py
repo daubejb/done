@@ -105,6 +105,13 @@ class Terminal:
             flags = None
 
     def evaluate_user_input(self, args):
+        if (args.add == False and
+           args.id == None and
+           args.id_done == None and
+           args.id_to_delete == None and
+           args.id_to_prioritize == None and
+           not args.web):
+            return args, 'display_list'
         if args.add:
             interactive_prompt = InteractivePrompt()
             inp = interactive_prompt.prompt_user_for_new_item()
@@ -113,6 +120,7 @@ class Terminal:
             return values, 'append_item'
         if args.web:
             webbrowser.open(WEB)
+            quit()
         if args.id_to_delete:
             return args.id_to_delete, 'delete_item'
         if args.id_done:

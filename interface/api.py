@@ -50,7 +50,6 @@ class GoogleAPI:
     discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                     'version=v4')
     service = discovery.build('sheets', 'v4', credentials=credentials)
-    print(service)
     def __init__(self):
         '''Instantiates a google api'''
 
@@ -66,6 +65,9 @@ class GoogleAPI:
             self.toggle_item_priority(values)
         if action_type == 'move_item':
             self.move_item_to_new_position(values)
+        if action_type == 'display_list':
+            response = self.retreive_list()
+            return response
 
 
     def append_item_to_sheet(self, values):
@@ -81,7 +83,7 @@ class GoogleAPI:
             spreadsheetId=SPREADSHEET_ID, range=RANGE,
             valueInputOption='USER_ENTERED',
             body=body).execute()
-
+        # Pass a message back in the future
     def delete_item_from_sheet(self, item_id):
         item_id = int(item_id)
         startIndex = item_id
@@ -108,7 +110,7 @@ class GoogleAPI:
         print(response)
         if 'replies' in response and 'spreadsheetId' in response:
             print('Item # %s deleted from list' % id)
-
+        # pass a message back in the future
     def done_item_from_sheet(self, item_id):
         item_id = int(item_id)
         A1 = item_id + 1
@@ -137,6 +139,7 @@ class GoogleAPI:
             valueInputOption='USER_ENTERED',
             body=body).execute()
         self.delete_item_from_sheet(item_id)
+        #  pass a message back in the future
         return
 
     def toggle_item_priority(self, item_id):
@@ -178,6 +181,7 @@ class GoogleAPI:
                 includeValuesInResponse=True,
                 body=body_)
         response = request.execute()
+        #  pass a message back in the future
         return
 
     def move_item_to_new_position(self, item_ids):
@@ -204,3 +208,10 @@ class GoogleAPI:
                 spreadsheetId=SPREADSHEET_ID,
                 body=batch_update_spreadsheet_request_body)
         response = request.execute()
+        #  pass a message back in the future
+    def retreive_list(self):
+        s = self.service
+        result = s.spreadsheets().values().get(
+            spreadsheetId=SPREADSHEET_ID, range=RANGE).execute()
+        values = result.get('values', [])
+        return values
