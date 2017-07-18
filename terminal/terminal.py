@@ -4,6 +4,7 @@ import fcntl
 import termios
 import struct
 import argparse
+import webbrowser
 
 from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
@@ -14,6 +15,7 @@ from colorama import Fore
 from colorama import Style
 
 HISTORY_FILE = os.path.join(os.environ['HOME'], '.done_history.txt')
+SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 ACTIONS = ['action',
            'followup',
            'idea',
@@ -22,6 +24,8 @@ ACTIONS = ['action',
            'update']
 CONTEXTS = ['work',
             'home']
+WEB = 'https://docs.google.com/spreadsheets/d/%s' % (SPREADSHEET_ID)
+
 
 def main():
     pass
@@ -108,7 +112,7 @@ class Terminal:
             values = input_analyzer.break_item_string_into_parts(inp)
             return values
         if args.web:
-            print('web')
+            webbrowser.open(WEB)
         if args.id_to_delete:
             print('delete')
         if args.id_done:
