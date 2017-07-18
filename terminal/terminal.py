@@ -116,7 +116,7 @@ class Terminal:
         if args.id_to_delete:
             return args.id_to_delete, 'delete_item'
         if args.id_done:
-            print('do')
+            return args.id_done, 'done_item'
         if args.id_to_prioritize:
             print('priority')
         if args.id:

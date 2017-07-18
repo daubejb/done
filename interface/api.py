@@ -1,5 +1,6 @@
 import os
 import os.path
+import time
 import httplib2
 
 from apiclient import discovery
@@ -10,8 +11,9 @@ from oauth2client.file import Storage
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 CLIENT_SECRET_FILE = 'client_secrets.json'
-APPLICATION_NAME = 'done'
+APPLICATION_NAME = '2done'
 RANGE = '2done!A2:E1000'
+DONE_RANGE = 'done!A2:F1000'
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 
 
@@ -58,6 +60,8 @@ class GoogleAPI:
             self.append_item_to_sheet(values)
         if action_type == 'delete_item':
             self.delete_item_from_sheet(values)
+        if action_type == 'done_item':
+            self.done_item_from_sheet(values)
 
     def append_item_to_sheet(self, values):
         body = {
@@ -99,3 +103,33 @@ class GoogleAPI:
         print(response)
         if 'replies' in response and 'spreadsheetId' in response:
             print('Item # %s deleted from list' % id)
+
+    def done_item_from_sheet(self, item_id):
+        item_id = int(item_id)
+        A1 = item_id + 1
+        ranges = ['%s!A%s:E%s' % (APPLICATION_NAME, A1, A1)]
+        s = self.service
+        request = s.spreadsheets().values().batchGet(
+                spreadsheetId=SPREADSHEET_ID,
+                ranges=ranges,
+                valueRenderOption='UNFORMATTED_VALUE',
+                dateTimeRenderOption='FORMATTED_STRING')
+
+        response = request.execute()
+
+        values = response['valueRanges'][0]['values'][0]
+        values[0] = '=row()-1'
+        values.insert(len(values), time.strftime("%Y-%m-%d"))
+        body = {
+                "range": DONE_RANGE,
+                "majorDimension": 'ROWS',
+                "values": [
+                        values
+                    ],
+        }
+        result = s.spreadsheets().values().append(
+            spreadsheetId=SPREADSHEET_ID, range=DONE_RANGE,
+            valueInputOption='USER_ENTERED',
+            body=body).execute()
+        self.delete_item_from_sheet(item_id)
+        return
