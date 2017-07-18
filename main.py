@@ -14,6 +14,6 @@ def main():
     if action_type == 'display_list':
         todo_list.populate_list(response)
         final_list = todo_list.filter_list_for_display(args, todo_list)
-        print(final_list)
+        terminal.display_todo_list(final_list)
 if __name__ == '__main__':
     main()

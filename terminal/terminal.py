@@ -5,11 +5,13 @@ import termios
 import struct
 import argparse
 import webbrowser
+import textwrap
 
 from prompt_toolkit import prompt
 from prompt_toolkit.history import FileHistory
 from prompt_toolkit.auto_suggest import AutoSuggestFromHistory
 from prompt_toolkit.contrib.completers import WordCompleter
+from terminaltables import AsciiTable
 from colorama import init
 from colorama import Fore
 from colorama import Style
@@ -25,10 +27,33 @@ ACTIONS = ['action',
 CONTEXTS = ['work',
             'home']
 WEB = 'https://docs.google.com/spreadsheets/d/%s' % (SPREADSHEET_ID)
-
+APPLICATION_NAME = '2done'
+TODAY_COLOR = '\033[95m'
+HEADER_ROW_COLOR = '\033[92m'
 
 def main():
     pass
+
+def get_ANSI_color(string):
+    color = string
+    color.upper()
+    if color == 'GREEN':
+        color = '\033[92m'
+    elif color == 'RED':
+        color = '\033[31m'
+    elif color == 'YELLOW':
+        color = '\033[93m'
+    elif color == 'BLUE':
+        color = '\033[34m'
+    elif color == 'MAGENTA':
+        color = '\033[95m'
+    elif color == 'CYAN':
+        color = '\033[36m'
+    elif color == 'NORMAL':
+        color = '\033[39m'
+    elif color == 'WHITE':
+        color = '\033[37m'
+    return color
 
 class Terminal:
     '''Represents the terminal displays the user interface.'''
@@ -131,9 +156,35 @@ class Terminal:
             return args.id, 'move_item'
 
 
-    def display_todo_list(self):
+    def display_todo_list(self, final_values):
         '''displays the todo list in the terminal'''
-        pass
+        term_width = self.get_size() - 30
+        for row in final_values:
+            total_length = len(row[0]) + len(row[1]) + len(row[2]) + \
+                           len(row[3]) + len(row[4])
+            other_columns = len(row[0]) + len(row[1]) + len(row[2]) + \
+                len(row[4])
+            short_length = term_width - other_columns
+            if(total_length > term_width):
+                shortened_text = textwrap.fill(row[3], width=short_length)
+                row[3] = shortened_text
+            yes = ['YES', 'Yes', 'yes', 'Y', 'y']
+            if row[1] in yes:
+                row[0] = TODAY_COLOR + row[0]
+                row[4] = row[4] + Style.RESET_ALL
+
+            data = []
+            data.append([HEADER_ROW_COLOR + Style.BRIGHT + 'id',
+                'today', 'group', 'todo item',
+                'context' + Fore.RESET + Style.RESET_ALL])
+
+            for row in final_values:
+                data.append([row[0], row[1], row[2], row[3], row[4]])
+
+
+        table = AsciiTable(data)
+        table.title = APPLICATION_NAME
+        print(table.table)
 
 
 class InteractivePrompt:
