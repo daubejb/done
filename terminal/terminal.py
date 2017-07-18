@@ -154,7 +154,8 @@ class Terminal:
             return args.id_to_prioritize, 'prioritize_item'
         if args.id:
             return args.id, 'move_item'
-
+        if args.focus:
+            return args, 'display_list'
 
     def display_todo_list(self, final_values):
         '''displays the todo list in the terminal'''

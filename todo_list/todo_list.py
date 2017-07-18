@@ -1,9 +1,11 @@
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 RANGE_ = '2done!A2:E1000'
+TODAY = 'False'
 
 class TodoList:
     '''Represents a minimal personal todo list containing to do items that
     can be added, done, deleted, and prioritized'''
+
     def __init__(self, name, ):
         '''Initialize a todo list with a name and an empty list'''
         self.name = name
@@ -33,7 +35,6 @@ class TodoList:
 
     def filter_list_for_display(self, args, todo_list):
         context = args.context
-        focus = args.focus
         group = args.group
         filtered_list = []
         todo_items = todo_list.todo_items
@@ -46,7 +47,7 @@ class TodoList:
                     item.context]
             return row
 
-        if focus == 'True':
+        if TODAY == 'True':
             for item in todo_items:
                 if item.today_flag == 'yes':
                     row = build_row(item)

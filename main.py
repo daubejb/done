@@ -1,16 +1,28 @@
 from todo_list.todo_list import TodoList
+from todo_list.todo_list import TODAY
 from terminal.terminal import Terminal
 from interface.api import GoogleAPI
 
 def main():
+    #  instantiate a terminal object
     terminal = Terminal()
+
+    #  use terminal to parse user input
     args = terminal.get_user_input()
+
+    #  instantiate a todo list named done
     todo_list = TodoList('done')
+
+    #  instantiate the google api object
     google_api = GoogleAPI()
-#    credentials = google_api.get_credentials()
-#    service = google_api.instantiate_api_service(credentials)
+
+    #  evaluate user intention and prepare the data for google api
     evaluation_response, action_type = terminal.evaluate_user_input(args)
+
+    #  process the request to act on the google sheet via api
     response = google_api.process_api_call(evaluation_response, action_type)
+
+    #  if user requests to see the to-do list, present what they request
     if action_type == 'display_list':
         todo_list.populate_list(response)
         final_list = todo_list.filter_list_for_display(args, todo_list)
