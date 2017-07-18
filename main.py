@@ -9,8 +9,8 @@ def main():
     google_api = GoogleAPI()
 #    credentials = google_api.get_credentials()
 #    service = google_api.instantiate_api_service(credentials)
-    values = terminal.evaluate_user_input(args)
-    google_api.process_api_call(values, 'append_item')
+    evaluation_response, action_type = terminal.evaluate_user_input(args)
+    google_api.process_api_call(evaluation_response, action_type)
     
 
 if __name__ == '__main__':

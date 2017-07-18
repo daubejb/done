@@ -52,10 +52,12 @@ class GoogleAPI:
     def __init__(self):
         '''Instantiates a google api'''
 
-    def process_api_call(self, values, api_type):
+    def process_api_call(self, values, action_type):
         '''Receives an api request and processes it based on the arguments.'''
-        if api_type == 'append_item':
+        if action_type == 'append_item':
             self.append_item_to_sheet(values)
+        if action_type == 'delete_item':
+            self.delete_item_from_sheet(values)
 
     def append_item_to_sheet(self, values):
         body = {
@@ -71,3 +73,29 @@ class GoogleAPI:
             valueInputOption='USER_ENTERED',
             body=body).execute()
 
+    def delete_item_from_sheet(self, item_id):
+        item_id = int(item_id)
+        startIndex = item_id
+        endIndex = item_id + 1
+        batch_update_values_request_body = {
+            "requests": [
+                {
+                    "deleteDimension": {
+                        "range": {
+                            "sheetId": 0,
+                            "dimension": "ROWS",
+                            "startIndex": startIndex,
+                            "endIndex": endIndex
+                        }
+                    }
+                }
+            ]
+        }
+        s = self.service
+        request = s.spreadsheets().batchUpdate(
+                spreadsheetId=SPREADSHEET_ID,
+                body=batch_update_values_request_body)
+        response = request.execute()
+        print(response)
+        if 'replies' in response and 'spreadsheetId' in response:
+            print('Item # %s deleted from list' % id)

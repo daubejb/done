@@ -110,11 +110,11 @@ class Terminal:
             inp = interactive_prompt.prompt_user_for_new_item()
             input_analyzer = InputAnalyzer()
             values = input_analyzer.break_item_string_into_parts(inp)
-            return values
+            return values, 'append_item'
         if args.web:
             webbrowser.open(WEB)
         if args.id_to_delete:
-            print('delete')
+            return args.id_to_delete, 'delete_item'
         if args.id_done:
             print('do')
         if args.id_to_prioritize:
