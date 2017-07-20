@@ -182,7 +182,7 @@ class Terminal:
             for row in final_values:
                 data.append([row[0], row[1], row[2], row[3], row[4]])
 
-
+        os.system('cls' if os.name == 'nt' else 'clear')
         table = AsciiTable(data)
         table.title = APPLICATION_NAME
         print(table.table)
