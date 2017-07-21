@@ -1,3 +1,6 @@
+#!usr/bin/python
+# todo_list.py
+
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 RANGE_ = '2done!A2:E1000'
 
@@ -35,6 +38,7 @@ class TodoList:
     def filter_list_for_display(self, args, todo_list):
         context = args.context
         group = args.group
+        focus = args.focus
         filtered_list = []
         todo_items = todo_list.todo_items
 
@@ -45,12 +49,12 @@ class TodoList:
                    item.task,
                    item.context]
             return row
-        # if settings['focus'] == True:
-        #     for item in todo_items:
-        #         if item.today_flag == 'yes':
-        #             row = build_row(item)
-        #             filtered_list.append(row)
-        if group != 'all' and context != 'all':
+        if focus == True:
+            for item in todo_items:
+                if item.today_flag == 'yes':
+                    row = build_row(item)
+                    filtered_list.append(row)
+        elif group != 'all' and context != 'all':
             for item in todo_items:
                 if item.group == group and item.context == context:
                     row = build_row(item)

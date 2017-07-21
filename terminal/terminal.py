@@ -32,8 +32,10 @@ APPLICATION_NAME = '2done'
 TODAY_COLOR = '\033[95m'
 HEADER_ROW_COLOR = '\033[92m'
 
+
 def main():
     pass
+
 
 def get_ANSI_color(string):
     color = string
@@ -55,6 +57,7 @@ def get_ANSI_color(string):
     elif color == 'WHITE':
         color = '\033[37m'
     return color
+
 
 class Terminal:
     '''Represents the terminal displays the user interface.'''
@@ -94,7 +97,7 @@ class Terminal:
                                 action='store',
                                 dest='id_done')
             parser.add_argument('-f', '--focus',
-                                help='toggle focus mode - displays on today \
+                                help='display focus mode - displays on today \
                                 items',
                                 action='store_true',
                                 dest='focus')
@@ -155,12 +158,6 @@ class Terminal:
             return args.id_to_prioritize, 'prioritize_item'
         if args.id:
             return args.id, 'move_item'
-        if args.focus:
-            # if settings['focus'] == True:
-            #     write_settings['focus'] = False
-            # else:
-            #     write_settings['focus'] = True
-            return args, 'display_list'
 
     def display_todo_list(self, final_values):
         '''displays the todo list in the terminal'''
@@ -181,8 +178,8 @@ class Terminal:
 
             data = []
             data.append([HEADER_ROW_COLOR + Style.BRIGHT + 'id',
-                'today', 'group', 'todo item',
-                'context' + Fore.RESET + Style.RESET_ALL])
+                        'today', 'group', 'todo item',
+                        'context' + Fore.RESET + Style.RESET_ALL])
 
             for row in final_values:
                 data.append([row[0], row[1], row[2], row[3], row[4]])

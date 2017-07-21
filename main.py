@@ -5,17 +5,12 @@ from todo_list.todo_list import TodoList
 from terminal.terminal import Terminal
 from interface.api import GoogleAPI
 from config import check_for_config_file
-from config import configfile_name
-from configparser import ConfigParser
+
 
 def main():
     # check for an existing configuration file
     check_for_config_file()
 
-    parser = ConfigParser()
-    parser.read(configfile_name)
-    confdict = {section: dict(parser.items(section)) for section in parser.sections()}
-    print(confdict)
     #  instantiate a terminal object
     terminal = Terminal()
 
