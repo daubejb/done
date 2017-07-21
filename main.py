@@ -32,9 +32,10 @@ def main():
         todo_list.populate_list(response)
         final_list = todo_list.filter_list_for_display(args, todo_list)
         terminal.display_todo_list(final_list)
+
+    #  if user updates source data, reset args, and display new list
     else:
         args2 = reset_args(args)
-
         evaluation_response2, action_type2 = terminal.evaluate_user_input(
             args2)
         response2 = google_api.process_api_call(
