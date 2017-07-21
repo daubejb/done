@@ -34,7 +34,7 @@ def main():
         terminal.display_todo_list(final_list)
 
     #  if user updates source data, reset args, and display new list
-    else:
+    elif app_conf.configs['display_list_after_add_item'] == 'True':
         args2 = reset_args(args)
         evaluation_response2, action_type2 = terminal.evaluate_user_input(
             args2)

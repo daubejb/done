@@ -50,5 +50,3 @@ class AppConf:
             for key, value in parser.items(section_name):
                 confs[key] = value
         return confs
-
-

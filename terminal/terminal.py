@@ -60,6 +60,10 @@ class Terminal:
         )
         self.actions = (app_conf.configs['actions']).split(',')
         self.contexts = (app_conf.configs['contexts']).split(',')
+        self.display_lines = (
+            app_conf.configs['display_lines_between_items'])
+        self.display_list = (
+            app_conf.configs['display_list_after_add_item'])
 
     def get_size(self):
         '''Analyzes the current terminal size and returns the width.'''
