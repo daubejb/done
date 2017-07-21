@@ -30,7 +30,7 @@ class AppConf:
             config.set('setup','history_file','HOME')
             config.set('setup','spreadsheet_id',
                     '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM')
-            config.set('setup','actions','action,followUp, idea,research,schedule,update')
+            config.set('setup','actions','action,followUp,idea,research,schedule,update')
             config.set('setup','contexts','home,work')
             config.add_section('display_options')
             config.set('display_options','display_list_after_add_item','True')

@@ -53,12 +53,13 @@ class Terminal:
         self.header_row_color = get_ANSI_color(
             app_conf.configs['header_row_color'])
         self.history_location = app_conf.configs['history_file']
+        self.history_file = os.path.join(
+            os.environ[self.history_location], '.2done_history.txt')
         self.web = 'https://docs.google.com/spreadsheets/d/{}'.format(
             self.spreadsheet_id
         )
         self.actions = (app_conf.configs['actions']).split(',')
         self.contexts = (app_conf.configs['contexts']).split(',')
-
 
     def get_size(self):
         '''Analyzes the current terminal size and returns the width.'''
@@ -134,9 +135,12 @@ class Terminal:
             return args, 'display_list'
         if args.add:
             interactive_prompt = InteractivePrompt()
-            inp = interactive_prompt.prompt_user_for_new_item()
+            inp = interactive_prompt.prompt_user_for_new_item(
+                self.actions,
+                self.history_file)
             input_analyzer = InputAnalyzer()
-            values = input_analyzer.break_item_string_into_parts(inp)
+            values = input_analyzer.break_item_string_into_parts(
+                inp, self.actions, self.contexts)
             return values, 'append_item'
         if args.web:
             webbrowser.open(self.web)
@@ -191,10 +195,10 @@ class InteractivePrompt:
     def __init__(self):
         '''Initializes an instance of the interactive prompt'''
 
-    def prompt_user_for_new_item(self):
-        group_completer = WordCompleter(self.actions, ignore_case=True)
+    def prompt_user_for_new_item(self, actions, history):
+        group_completer = WordCompleter(actions, ignore_case=True)
         inp = prompt('Enter to do item > ',
-                     history=FileHistory(self.history_file),
+                     history=FileHistory(history),
                      auto_suggest=AutoSuggestFromHistory(),
                      completer=group_completer)
         return inp
@@ -205,7 +209,7 @@ class InputAnalyzer:
     def __init__(self):
         '''Initializes an input analyzer'''
 
-    def break_item_string_into_parts(self, inp):
+    def break_item_string_into_parts(self, inp, actions, contexts):
         '''Takes a string and breaks it up into the relavent to-do list
         parts'''
         self.inp = inp
@@ -214,10 +218,10 @@ class InputAnalyzer:
         last_word = word_list[-1]
         word_one = " "
         word_last = " "
-        if first_word in self.actions:
+        if first_word in actions:
             word_one = first_word
             del word_list[0]
-        if last_word in self.contexts:
+        if last_word in contexts:
             word_last = last_word
             del word_list[-1]
         item_words = ' '.join(word_list)
