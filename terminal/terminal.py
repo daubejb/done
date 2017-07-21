@@ -190,6 +190,8 @@ class Terminal:
 
         os.system('cls' if os.name == 'nt' else 'clear')
         table = AsciiTable(data)
+        if self.display_lines == 'True':
+            table.inner_row_border = True
         table.title = self.application_name
         print(table.table)
 
