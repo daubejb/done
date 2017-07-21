@@ -4,6 +4,7 @@
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 RANGE_ = '2done!A2:E1000'
 
+
 class TodoList:
     '''Represents a minimal personal todo list containing to do items that
     can be added, done, deleted, and prioritized'''
@@ -49,7 +50,7 @@ class TodoList:
                    item.task,
                    item.context]
             return row
-        if focus == True:
+        if focus is True:
             for item in todo_items:
                 if item.today_flag == 'yes':
                     row = build_row(item)

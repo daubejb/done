@@ -57,5 +57,3 @@ def write_to_configurations(section, key, value):
 #     write_to_configurations('display_options', 'focus', 'False')
 # else:
 #     write_to_configurations('display_options', 'focus', 'True')
-
-

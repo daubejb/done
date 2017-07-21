@@ -134,11 +134,11 @@ class Terminal:
             flags = None
 
     def evaluate_user_input(self, args):
-        if (args.add == False and
-           args.id == None and
-           args.id_done == None and
-           args.id_to_delete == None and
-           args.id_to_prioritize == None and
+        if (args.add is False and
+           args.id is None and
+           args.id_done is None and
+           args.id_to_delete is None and
+           args.id_to_prioritize is None and
            not args.web):
             return args, 'display_list'
         if args.add:
@@ -177,9 +177,14 @@ class Terminal:
                 row[4] = row[4] + Style.RESET_ALL
 
             data = []
-            data.append([HEADER_ROW_COLOR + Style.BRIGHT + 'id',
-                        'today', 'group', 'todo item',
-                        'context' + Fore.RESET + Style.RESET_ALL])
+            data.append([HEADER_ROW_COLOR +
+                         Style.BRIGHT +
+                         'id',
+                         'today',
+                         'group',
+                         'todo item',
+                         'context' +
+                         Fore.RESET + Style.RESET_ALL])
 
             for row in final_values:
                 data.append([row[0], row[1], row[2], row[3], row[4]])
