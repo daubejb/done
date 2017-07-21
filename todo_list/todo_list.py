@@ -1,6 +1,5 @@
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 RANGE_ = '2done!A2:E1000'
-TODAY = 'False'
 
 class TodoList:
     '''Represents a minimal personal todo list containing to do items that
@@ -41,18 +40,17 @@ class TodoList:
 
         def build_row(item):
             row = [item.item_id,
-                    item.today_flag,
-                    item.group,
-                    item.task,
-                    item.context]
+                   item.today_flag,
+                   item.group,
+                   item.task,
+                   item.context]
             return row
-
-        if TODAY == 'True':
-            for item in todo_items:
-                if item.today_flag == 'yes':
-                    row = build_row(item)
-                    filtered_list.append(row)
-        elif group != 'all' and context != 'all':
+        # if settings['focus'] == True:
+        #     for item in todo_items:
+        #         if item.today_flag == 'yes':
+        #             row = build_row(item)
+        #             filtered_list.append(row)
+        if group != 'all' and context != 'all':
             for item in todo_items:
                 if item.group == group and item.context == context:
                     row = build_row(item)

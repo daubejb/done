@@ -16,6 +16,7 @@ from colorama import init
 from colorama import Fore
 from colorama import Style
 
+
 HISTORY_FILE = os.path.join(os.environ['HOME'], '.done_history.txt')
 SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
 ACTIONS = ['action',
@@ -155,6 +156,10 @@ class Terminal:
         if args.id:
             return args.id, 'move_item'
         if args.focus:
+            # if settings['focus'] == True:
+            #     write_settings['focus'] = False
+            # else:
+            #     write_settings['focus'] = True
             return args, 'display_list'
 
     def display_todo_list(self, final_values):
@@ -182,7 +187,7 @@ class Terminal:
             for row in final_values:
                 data.append([row[0], row[1], row[2], row[3], row[4]])
 
-        os.system('cls' if os.name == 'nt' else 'clear')
+#        os.system('cls' if os.name == 'nt' else 'clear')
         table = AsciiTable(data)
         table.title = APPLICATION_NAME
         print(table.table)
