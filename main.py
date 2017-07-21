@@ -4,15 +4,15 @@ import os.path
 from todo_list.todo_list import TodoList
 from terminal.terminal import Terminal
 from interface.api import GoogleAPI
-from config import ApplicationConfiguration
+from config import AppConf
 
 
 def main():
     # check for an existing configuration file
-    configurations = ApplicationConfiguration()
-    configurations.check_for_config_file()
+    app_conf = AppConf()
+
     #  use terminal to parse user input
-    terminal = Terminal()
+    terminal = Terminal(app_conf)
     args = terminal.get_user_input()
 
     #  instantiate a todo list named done

@@ -17,22 +17,6 @@ from colorama import Fore
 from colorama import Style
 
 
-HISTORY_FILE = os.path.join(os.environ['HOME'], '.done_history.txt')
-SPREADSHEET_ID = '1WIlw6BvlQtjXO9KtnT4b6XY8d3qAaK5RYDRnzekkVjM'
-ACTIONS = ['action',
-           'followup',
-           'idea',
-           'research',
-           'schedule',
-           'update']
-CONTEXTS = ['work',
-            'home']
-WEB = 'https://docs.google.com/spreadsheets/d/%s' % (SPREADSHEET_ID)
-APPLICATION_NAME = '2done'
-TODAY_COLOR = '\033[95m'
-HEADER_ROW_COLOR = '\033[92m'
-
-
 def main():
     pass
 
@@ -61,8 +45,20 @@ def get_ANSI_color(string):
 
 class Terminal:
     '''Represents the terminal displays the user interface.'''
-    def __init__(self):
+    def __init__(self, app_conf):
         '''Initializes an instance of the terminal.'''
+        self.application_name = app_conf.configs['application_name']
+        self.spreadsheet_id = app_conf.configs['spreadsheet_id']
+        self.today_color = get_ANSI_color(app_conf.configs['today_color'])
+        self.header_row_color = get_ANSI_color(
+            app_conf.configs['header_row_color'])
+        self.history_location = app_conf.configs['history_file']
+        self.web = 'https://docs.google.com/spreadsheets/d/{}'.format(
+            self.spreadsheet_id
+        )
+        self.actions = (app_conf.configs['actions']).split(',')
+        self.contexts = (app_conf.configs['contexts']).split(',')
+
 
     def get_size(self):
         '''Analyzes the current terminal size and returns the width.'''
@@ -87,7 +83,7 @@ class Terminal:
                                 action='store',
                                 dest='context',
                                 default='all',
-                                choices=['all', 'home', 'work'])
+                                choices=self.contexts)
             parser.add_argument('--delete',
                                 help='delete an item by id',
                                 action='store',
@@ -107,12 +103,7 @@ class Terminal:
                                 action='store',
                                 dest='group',
                                 default='all',
-                                choices=['action',
-                                         'followup',
-                                         'idea',
-                                         'research',
-                                         'schedule',
-                                         'update'])
+                                choices=self.actions)
             parser.add_argument('-m', '--move',
                                 help='enter the id of the item you want to \
                                 move and the destination position',
@@ -148,7 +139,7 @@ class Terminal:
             values = input_analyzer.break_item_string_into_parts(inp)
             return values, 'append_item'
         if args.web:
-            webbrowser.open(WEB)
+            webbrowser.open(self.web)
             quit()
         if args.id_to_delete:
             return args.id_to_delete, 'delete_item'
@@ -173,11 +164,11 @@ class Terminal:
                 row[3] = shortened_text
             yes = ['YES', 'Yes', 'yes', 'Y', 'y']
             if row[1] in yes:
-                row[0] = TODAY_COLOR + row[0]
+                row[0] = self.today_color + row[0]
                 row[4] = row[4] + Style.RESET_ALL
 
             data = []
-            data.append([HEADER_ROW_COLOR +
+            data.append([self.header_row_color +
                          Style.BRIGHT +
                          'id',
                          'today',
@@ -191,7 +182,7 @@ class Terminal:
 
 #        os.system('cls' if os.name == 'nt' else 'clear')
         table = AsciiTable(data)
-        table.title = APPLICATION_NAME
+        table.title = self.application_name
         print(table.table)
 
 
@@ -201,9 +192,9 @@ class InteractivePrompt:
         '''Initializes an instance of the interactive prompt'''
 
     def prompt_user_for_new_item(self):
-        group_completer = WordCompleter(ACTIONS, ignore_case=True)
+        group_completer = WordCompleter(self.actions, ignore_case=True)
         inp = prompt('Enter to do item > ',
-                     history=FileHistory(HISTORY_FILE),
+                     history=FileHistory(self.history_file),
                      auto_suggest=AutoSuggestFromHistory(),
                      completer=group_completer)
         return inp
@@ -223,10 +214,10 @@ class InputAnalyzer:
         last_word = word_list[-1]
         word_one = " "
         word_last = " "
-        if first_word in ACTIONS:
+        if first_word in self.actions:
             word_one = first_word
             del word_list[0]
-        if last_word in CONTEXTS:
+        if last_word in self.contexts:
             word_last = last_word
             del word_list[-1]
         item_words = ' '.join(word_list)
