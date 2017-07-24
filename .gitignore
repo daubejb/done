@@ -1,4 +1,5 @@
 .vscode/
 __init__.py
 __pycache__/
-client_secrets.json
+done_client_secrets.json
+interface/done_client_secret.json
